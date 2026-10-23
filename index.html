@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Location Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
+        .box { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn { background-color: #28a745; color: white; padding: 12px 24px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        #map-link { display: none; margin-top: 20px; font-weight: bold; color: #007bff; text-decoration: none; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Location Finder</h2>
+    <p>Please click the button below and allow location permission.</p>
+    <button class="btn" onclick="findLocation()">Get My Location</button>
+    
+    <div id="status" style="margin-top: 20px;"></div>
+    <a id="map-link" href="#" target="_blank">🗺 Click here to view on Google Maps</a>
+</div>
+
+<script>
+function findLocation() {
+    const status = document.getElementById("status");
+    const mapLink = document.getElementById("map-link");
+    status.innerHTML = "Locating... Please click 'Allow'.";
+    mapLink.style.display = "none";
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                status.innerHTML = "<strong>Latitude:</strong> " + lat + "<br><strong>Longitude:</strong> " + lon;
+                mapLink.href = "https://google.com" + lat + "," + lon;
+                mapLink.style.display = "block";
+            },
+            () => {
+                status.innerHTML = "❌ Error: Permission Denied or GPS turned off.";
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    } else {
+        status.innerHTML = "Geolocation not supported.";
+    }
+}
+</script>
+
+</body>
+</html>
